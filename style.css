@@ -1,0 +1,11 @@
+#board {
+  border-collapse: collapse;
+}
+
+td {
+  padding: 1em;
+  border-style: solid;
+  border-color: black;
+  width: 33%;
+  height: 33%;
+}
