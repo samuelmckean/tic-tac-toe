@@ -1,4 +1,6 @@
 const gameboard = (function () {
+  // gameboard module
+
   // initial private variable of 9 empty strings
   const _gameboard = Array(9).fill('');
 
@@ -21,8 +23,20 @@ const gameboard = (function () {
   }
 })();
 
-gameboard.setGameboard('X', 1);
-console.log(gameboard.setGameboard('O', -1));
-console.log(gameboard.setGameboard('O', 9));
-gameboard.setGameboard('O', 4);
-console.log(gameboard.getGameboard());
+
+const Player = function (playerSymbol) {
+  // factory function for creating instance of Player object
+  
+  const _playerSymbol = playerSymbol;
+  
+  const getPlayerSymbol = function () { return _playerSymbol };
+
+  return {
+    getPlayerSymbol
+  }
+}
+
+// create two Player objects with symbols X and O
+const playerX = Player('X');
+const playerO = Player('O');
+
