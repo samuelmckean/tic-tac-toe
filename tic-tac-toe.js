@@ -4,20 +4,16 @@ const gameboard = (function() {
   // initial private variable of 9 empty strings
   const _gameboard = Array(9).fill('');
 
-  // keeps track of who's turn it is
-  let _whosTurn;
-
-  const getWhosTurn = function() { return _whosTurn };
-
-  const setWhosTurn = function(player) { _whosTurn = player };
+  // stores object of player whos turn it is
+  let whosTurn;
 
   const getGameboard = function() { return _gameboard };
 
-  const setGameboard = function(player, moveSpot) {
+  const setGameboard = function(playerSymbol, moveSpot) {
     // check if move is valid
     if (isValidMove(moveSpot)) {
       // make move
-        _gameboard[moveSpot] = player.getPlayerSymbol();
+        _gameboard[moveSpot] = playerSymbol;
     } else {
       // return null if invalid move
       return null;
@@ -33,8 +29,7 @@ const gameboard = (function() {
   }
   
   return {
-    getWhosTurn,
-    setWhosTurn,
+    whosTurn,
     getGameboard,
     setGameboard,
     isValidMove
@@ -56,14 +51,15 @@ const Player = function(playerSymbol) {
 
 
 const displayController = (function() {
+  // module for controlling the html display and creating event listeners
 
-  const _renderBoard = function(gameboard) {
+  const renderBoard = function(gameboard) {
     // create container for board
     const table = document.createElement('table');
     table.id = 'board';
 
     // get current board state
-    const board = gameboard.getGameboard();
+    let board = gameboard.getGameboard();
 
     // create row
     for (let i = 0; i < 3; i++) {
@@ -73,6 +69,7 @@ const displayController = (function() {
         let cell = document.createElement('td');
         cell.id = (3 * i + j).toString();
         cell.innerHTML = board[3 * i + j];
+        cell.addEventListener('click', _moveClicked);
         row.append(cell)
       }
       table.append(row);
@@ -80,69 +77,29 @@ const displayController = (function() {
     document.getElementById('root').replaceChildren(table);
   }
 
-  const updateBoard = function(player, move, gameboard) {
-    if (gameboard.setGameboard(player.getPlayerSymbol(), move) === null) {
-      // return null if invalid move
-      return null
-    }
-    _renderBoard(gameboard);
-  }
-
-  return {
-    updateBoard
-  }
-})();
-
-
-const game = (function() {
-  // module for playing a game of tic-tac-toe
-  const start = function() {
-    // create gameboard, players, and displayController
-    const playerX = Player('X');
-    const playerO = Player('O');
-
-    // randomize who goes first and send alert
-    if (Math.round(Math.random())) {
-      alert('O goes first');
-      gameboard.setWhosTurn(playerO);
-    } else {
-      alert('X goes first');
-      gameboard.setWhosTurn(playerX);
-    }
-
-    // repeat turn back and forth until game has ended
-    while (!_checkGameEnded()) {
-      _turn(gameboard.getWhosTurn());
-    }
-  }
-
-  const _turn = function(player) {
-    _wireClickEvents();
-    displayController.updateBoard(player);
-  }
-
-  const _wireClickEvents = function() {
-    for (let i = 0; i < gameboard.getGameboard().length; i++) {
-      document.getElementById(i.toString()).addEventListener('click', _moveClicked);
-    }
-  } 
-
   const _moveClicked = function() {
     let move = this.id;
-    if (null === gameboard.setGameboard(gameboard.getWhosTurn(), move)) {
-      alert('That spot has already been taken. Choose another location.');
-    } else {
-      gameboard.setGameboard(gameboard.getWhosTurn(), move);
-      
-      // switch whos turn it is
-      if (gameboard.getWhosTurn() === playerO) {
-        gameboard.setWhosTurn(playerX);
+    while (true) {
+      if (null === gameboard.setGameboard(gameboard.whosTurn, move)) {
+        alert('That spot has already been taken. Choose another location.');
       } else {
-        gameboard.setWhosTurn(playerO);
+        gameboard.setGameboard(gameboard.whosTurn, move);
+        if (_checkGameEnded()) {
+          alert(`${gameboard.whosTurn} has won!`);
+          return
+        }
+        break;
+      }
+      // switch whos turn it is
+      if (gameboard.whosTurn === 'O') {
+        gameboard.whosTurn = 'X';
+      } else {
+        gameboard.whosTurn = 'O';
       }
     }
+    renderBoard(gameboard);
   }
-  
+
   const _checkGameEnded = function() {
     const currentBoard = gameboard.getGameboard();
     // check rows
@@ -166,6 +123,30 @@ const game = (function() {
       return true;
     } else {
       return false;
+    }
+  }
+
+  return {
+    renderBoard
+  }
+})();
+
+
+const game = (function() {
+  // module for playing a game of tic-tac-toe
+  const start = function() {
+    // create gameboard, players, and displayController
+    const playerX = Player('X');
+    const playerO = Player('O');
+    displayController.renderBoard(gameboard);
+
+    // randomize who goes first and send alert
+    if (Math.round(Math.random())) {
+      alert('O goes first');
+      gameboard.whosTurn = 'O';
+    } else {
+      alert('X goes first');
+      gameboard.whosTurn = 'X';
     }
   }
 
