@@ -84,17 +84,19 @@ const displayController = (function() {
         alert('That spot has already been taken. Choose another location.');
       } else {
         gameboard.setGameboard(gameboard.whosTurn, move);
-        if (_checkGameEnded()) {
+        // switch whos turn it is
+        if (gameboard.whosTurn === 'O') {
+          gameboard.whosTurn = 'X';
+        } else {
+          gameboard.whosTurn = 'O';
+        }
+        // check if game has ended
+        if (_checkGameEnded === null) {
+          alert('Tie.');
+        } else if (_checkGameEnded()) {
           alert(`${gameboard.whosTurn} has won!`);
-          return
         }
         break;
-      }
-      // switch whos turn it is
-      if (gameboard.whosTurn === 'O') {
-        gameboard.whosTurn = 'X';
-      } else {
-        gameboard.whosTurn = 'O';
       }
     }
     renderBoard(gameboard);
@@ -121,6 +123,10 @@ const displayController = (function() {
       return true;
     } else if (currentBoard[2] !== '' && currentBoard[2] === currentBoard[5] && currentBoard[2] === currentBoard[8]) {
       return true;
+    // all spaces have been taken up
+    } else if (!currentBoard.includes('')) {
+      return null;
+    // the game continues
     } else {
       return false;
     }
