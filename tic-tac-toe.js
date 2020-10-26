@@ -84,7 +84,7 @@ const displayController = (function() {
     } else {
       gameboard.setGameboard(gameboard.whosTurn, move);
       // check if game has ended
-      if (_checkGameEnded === null) {
+      if (_checkGameEnded() === null) {
         alert('Tie.');
       } else if (_checkGameEnded()) {
         alert(`${gameboard.whosTurn} has won!`);
