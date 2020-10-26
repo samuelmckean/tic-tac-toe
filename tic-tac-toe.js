@@ -54,27 +54,18 @@ const displayController = (function() {
   // module for controlling the html display and creating event listeners
 
   const renderBoard = function(gameboard) {
-    // create container for board
-    const table = document.createElement('table');
-    table.id = 'board';
+    // get container for board
+    const table = document.getElementById('board');
 
     // get current board state
     let board = gameboard.getGameboard();
 
-    // create row
-    for (let i = 0; i < 3; i++) {
-      let row = document.createElement('tr');
-      // create cells in row
-      for (let j = 0; j < 3; j++) {
-        let cell = document.createElement('td');
-        cell.id = (3 * i + j).toString();
-        cell.innerHTML = board[3 * i + j];
-        cell.addEventListener('click', _moveClicked);
-        row.append(cell)
-      }
-      table.append(row);
+    // get cell
+    for (let i = 0; i < 9; i++) {
+      let cell = document.getElementById(i.toString());
+      cell.innerHTML = board[i];
+      cell.addEventListener('click', _moveClicked);
     }
-    document.getElementById('root').replaceChildren(table);
   }
 
   const _moveClicked = function() {
@@ -98,6 +89,15 @@ const displayController = (function() {
     }
     renderBoard(gameboard);
   }
+  
+  const _createEventListeners = function() {
+    for (let i = 0; i < 9; i++) {
+      let cell = document.getElementById(i.toString());
+      cell.addEventListener('click', _moveClicked);
+    }
+  }
+
+  _createEventListeners();
 
   const _checkGameEnded = function() {
     const currentBoard = gameboard.getGameboard();
