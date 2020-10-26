@@ -79,24 +79,21 @@ const displayController = (function() {
 
   const _moveClicked = function() {
     let move = this.id;
-    while (true) {
-      if (null === gameboard.setGameboard(gameboard.whosTurn, move)) {
-        alert('That spot has already been taken. Choose another location.');
+    if (null === gameboard.setGameboard(gameboard.whosTurn, move)) {
+      alert('That spot has already been taken. Choose another location.');
+    } else {
+      gameboard.setGameboard(gameboard.whosTurn, move);
+      // check if game has ended
+      if (_checkGameEnded === null) {
+        alert('Tie.');
+      } else if (_checkGameEnded()) {
+        alert(`${gameboard.whosTurn} has won!`);
+      }
+      // switch whos turn it is
+      if (gameboard.whosTurn === 'O') {
+        gameboard.whosTurn = 'X';
       } else {
-        gameboard.setGameboard(gameboard.whosTurn, move);
-        // switch whos turn it is
-        if (gameboard.whosTurn === 'O') {
-          gameboard.whosTurn = 'X';
-        } else {
-          gameboard.whosTurn = 'O';
-        }
-        // check if game has ended
-        if (_checkGameEnded === null) {
-          alert('Tie.');
-        } else if (_checkGameEnded()) {
-          alert(`${gameboard.whosTurn} has won!`);
-        }
-        break;
+        gameboard.whosTurn = 'O';
       }
     }
     renderBoard(gameboard);
