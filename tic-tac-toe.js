@@ -37,14 +37,19 @@ const gameboard = (function() {
 })();
 
 
-const Player = function(playerSymbol) {
+const Player = function(playerSymbol, playerName) {
   // factory function for creating instance of Player object
   
   const _playerSymbol = playerSymbol;
+
+  const _playerName = playerName;
+
+  const getPlayerName = function() { return playerName };
   
   const getPlayerSymbol = function() { return _playerSymbol };
 
   return {
+    getPlayerName,
     getPlayerSymbol
   }
 }
