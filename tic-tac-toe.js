@@ -20,6 +20,11 @@ const gameboard = (function() {
     }
   }
 
+  const resetGameboard = function() {
+    // resets the gameboard with empty strings
+    _gameboard = Array(9).fill('');
+  }
+
   const isValidMove = function(moveSpot) {
     // checks that a move is on the board and the spot is not already taken
     if (moveSpot < _gameboard.length && moveSpot >= 0 && _gameboard[moveSpot] === '') {
@@ -32,7 +37,8 @@ const gameboard = (function() {
     whosTurn,
     getGameboard,
     setGameboard,
-    isValidMove
+    isValidMove,
+    resetGameboard
   }
 })();
 
@@ -102,6 +108,8 @@ const displayController = (function() {
   let playerX;
   let playerO;
 
+  const startRestartButton = document.getElementById('start-restart');
+
   const _clickStart = function() {
     // get player names from inputs  
     const player1Name = document.getElementById('player1').value;
@@ -112,17 +120,17 @@ const displayController = (function() {
     playerO = Player('O', player2Name);
 
     // change start button to restart button
-    const restartButton = document.getElementById('start-restart').innerHTML = 'Restart';
-    restartButton.removeEventListener('click', _clickStart);
-    restartButton.addEventListener('click', _clickRestart);
+    startRestartButton.innerHTML = 'Restart';
+    startRestartButton.removeEventListener('click', _clickStart);
+    startRestartButton.addEventListener('click', _clickRestart);
   }
 
   const _clickRestart = function() {
     gameboard.resetGameboard();
     renderBoard();
-    const startButton = document.getElementById('start-restart').innerHTML = 'Start';
-    startButton.removeEventListener('click', _clickRestart);
-    startButton.addEventListener('click', _clickStart);
+    startRestartButton.innerHTML = 'Start';
+    startRestartButton.removeEventListener('click', _clickRestart);
+    startRestartButton.addEventListener('click', _clickStart);
   }
 
   
