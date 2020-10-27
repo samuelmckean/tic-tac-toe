@@ -2,7 +2,7 @@ const gameboard = (function() {
   // gameboard module
 
   // initial private variable of 9 empty strings
-  const _gameboard = Array(9).fill('');
+  let _gameboard = Array(9).fill('');
 
   // stores symbol of player whos turn it is
   let whosTurn;
