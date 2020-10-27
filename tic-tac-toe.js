@@ -4,7 +4,7 @@ const gameboard = (function() {
   // initial private variable of 9 empty strings
   const _gameboard = Array(9).fill('');
 
-  // stores object of player whos turn it is
+  // stores symbol of player whos turn it is
   let whosTurn;
 
   const getGameboard = function() { return _gameboard };
@@ -83,7 +83,11 @@ const displayController = (function() {
       if (_checkGameEnded() === null) {
         alert('Tie.');
       } else if (_checkGameEnded()) {
-        alert(`${gameboard.whosTurn} has won!`);
+        if (gameboard.whosTurn === 'X') {
+          alert(`${playerX.getPlayerName()} has won!`);
+        } else {
+          alert(`${playerO.getPlayerName()} has won!`);
+        }
       }
       // switch whos turn it is
       if (gameboard.whosTurn === 'O') {
@@ -94,13 +98,27 @@ const displayController = (function() {
     }
     renderBoard(gameboard);
   }
+
+  let playerX;
+  let playerO;
+
+  const _getNames = function() {
+    // get player names from inputs  
+    const player1Name = document.getElementById('player1').value;
+    const player2Name = document.getElementById('player2').value;
+    
+    // create player objects
+    playerX = Player('X', player1Name);
+    playerO = Player('O', player2Name);
+  }
+
   
   const _createEventListeners = function() {
     for (let i = 0; i < 9; i++) {
       let cell = document.getElementById(i.toString());
       cell.addEventListener('click', _moveClicked);
     }
-    document.getElementById('start-restart').addEventListener('click', game.start);
+    document.getElementById('start-restart').addEventListener('click', _getNames);
   }
 
   _createEventListeners();
@@ -143,14 +161,8 @@ const displayController = (function() {
 
 const game = (function() {
   // module for playing a game of tic-tac-toe
-  const start = function() {
-    // get player names from inputs
-    const player1Name = document.getElementById('player1').value;
-    const player2Name = document.getElementById('player2').value;
 
-    // create gameboard, players, and displayController
-    const playerX = Player('X', player1Name);
-    const playerO = Player('O', player2Name);
+  const start = function() {
     displayController.renderBoard(gameboard);
 
     // randomize who goes first and send alert
