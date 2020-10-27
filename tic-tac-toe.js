@@ -125,10 +125,10 @@ const displayController = (function() {
 
   const _clickRestart = function() {
     gameboard.resetGameboard();
-    renderBoard();
     startRestartButton.innerHTML = 'Start';
     startRestartButton.removeEventListener('click', _clickRestart);
     startRestartButton.addEventListener('click', _clickStart);
+    game.start();
   }
 
   
