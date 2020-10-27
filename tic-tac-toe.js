@@ -144,9 +144,13 @@ const displayController = (function() {
 const game = (function() {
   // module for playing a game of tic-tac-toe
   const start = function() {
+    // get player names from inputs
+    const player1Name = document.getElementById('player1').value;
+    const player2Name = document.getElementById('player2').value;
+
     // create gameboard, players, and displayController
-    const playerX = Player('X');
-    const playerO = Player('O');
+    const playerX = Player('X', player1Name);
+    const playerO = Player('O', player2Name);
     displayController.renderBoard(gameboard);
 
     // randomize who goes first and send alert
