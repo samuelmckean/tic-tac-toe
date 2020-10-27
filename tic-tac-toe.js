@@ -2,7 +2,7 @@ const gameboard = (function() {
   // gameboard module
 
   // initial private variable of 9 empty strings
-  let _gameboard = Array(9).fill('');
+  const _gameboard = Array(9).fill('');
 
   // stores symbol of player whos turn it is
   let whosTurn;
@@ -22,7 +22,7 @@ const gameboard = (function() {
 
   const resetGameboard = function() {
     // resets the gameboard with empty strings
-    _gameboard = Array(9).fill('');
+    _gameboard.fill('');
   }
 
   const isValidMove = function(moveSpot) {
@@ -50,7 +50,7 @@ const Player = function(playerSymbol, playerName) {
 
   const _playerName = playerName;
 
-  const getPlayerName = function() { return playerName };
+  const getPlayerName = function() { return _playerName };
   
   const getPlayerSymbol = function() { return _playerSymbol };
 
@@ -65,8 +65,6 @@ const displayController = (function() {
   // module for controlling the html display and creating event listeners
 
   const renderBoard = function(gameboard) {
-    // get container for board
-    const table = document.getElementById('board');
 
     // get current board state
     let board = gameboard.getGameboard();
