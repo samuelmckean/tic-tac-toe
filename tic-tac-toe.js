@@ -95,6 +95,7 @@ const displayController = (function() {
       let cell = document.getElementById(i.toString());
       cell.addEventListener('click', _moveClicked);
     }
+    document.getElementById('start-restart').addEventListener('click', game.start);
   }
 
   _createEventListeners();
