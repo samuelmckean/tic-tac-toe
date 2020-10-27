@@ -102,7 +102,7 @@ const displayController = (function() {
   let playerX;
   let playerO;
 
-  const _getNames = function() {
+  const _clickStart = function() {
     // get player names from inputs  
     const player1Name = document.getElementById('player1').value;
     const player2Name = document.getElementById('player2').value;
@@ -110,6 +110,19 @@ const displayController = (function() {
     // create player objects
     playerX = Player('X', player1Name);
     playerO = Player('O', player2Name);
+
+    // change start button to restart button
+    const restartButton = document.getElementById('start-restart').innerHTML = 'Restart';
+    restartButton.removeEventListener('click', _clickStart);
+    restartButton.addEventListener('click', _clickRestart);
+  }
+
+  const _clickRestart = function() {
+    gameboard.resetGameboard();
+    renderBoard();
+    const startButton = document.getElementById('start-restart').innerHTML = 'Start';
+    startButton.removeEventListener('click', _clickRestart);
+    startButton.addEventListener('click', _clickStart);
   }
 
   
@@ -118,7 +131,7 @@ const displayController = (function() {
       let cell = document.getElementById(i.toString());
       cell.addEventListener('click', _moveClicked);
     }
-    document.getElementById('start-restart').addEventListener('click', _getNames);
+    document.getElementById('start-restart').addEventListener('click', _clickStart);
   }
 
   _createEventListeners();
